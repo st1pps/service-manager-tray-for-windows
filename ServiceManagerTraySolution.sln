@@ -22,8 +22,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Artifacts", "Artifacts", "{
 		Artifacts\windows_service_manager.pml = Artifacts\windows_service_manager.pml
 	EndProjectSection
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Service Manager Tray Installer", "Service-Manager-Tray-Installer\Service-Manager-Tray-Installer.vdproj", "{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceManager", "ServiceManager\ServiceManager.csproj", "{F44B47CA-2A90-4BDE-8D92-0D2F9EFEF882}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceManager.Installer", "ServiceManager.Installer\ServiceManager.Installer.csproj", "{79EE5F97-3262-4390-AC0D-DE9AA520C355}"
@@ -77,21 +75,6 @@ Global
 		{5ACD07B8-8874-4C8F-B6A6-66E646218FA3}.SingleImage|x64.Build.0 = Release|x64
 		{5ACD07B8-8874-4C8F-B6A6-66E646218FA3}.SingleImage|x86.ActiveCfg = Release|x86
 		{5ACD07B8-8874-4C8F-B6A6-66E646218FA3}.SingleImage|x86.Build.0 = Release|x86
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.CD_ROM|Any CPU.ActiveCfg = Release
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.CD_ROM|x64.ActiveCfg = Release
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.CD_ROM|x86.ActiveCfg = Release
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.Debug|Any CPU.ActiveCfg = Debug
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.Debug|x64.ActiveCfg = Debug
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.Debug|x86.ActiveCfg = Debug
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.DVD-5|Any CPU.ActiveCfg = Debug
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.DVD-5|x64.ActiveCfg = Debug
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.DVD-5|x86.ActiveCfg = Debug
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.Release|Any CPU.ActiveCfg = Release
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.Release|x64.ActiveCfg = Release
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.Release|x86.ActiveCfg = Release
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.SingleImage|Any CPU.ActiveCfg = Release
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.SingleImage|x64.ActiveCfg = Release
-		{7C19D956-9B9E-4CE0-BBE7-21DBD0179734}.SingleImage|x86.ActiveCfg = Release
 		{F44B47CA-2A90-4BDE-8D92-0D2F9EFEF882}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
 		{F44B47CA-2A90-4BDE-8D92-0D2F9EFEF882}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{F44B47CA-2A90-4BDE-8D92-0D2F9EFEF882}.CD_ROM|x64.ActiveCfg = Release|Any CPU
