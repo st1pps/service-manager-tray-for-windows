@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using Autofac;
 using Caliburn.Micro;
+using ServiceManager.Tray;
+using ServiceManager.Util;
 using ServiceManager.ViewModels;
 using IContainer = Autofac.IContainer;
 
@@ -22,14 +26,22 @@ namespace ServiceManager
         protected override void Configure()
         {
             var builder = new ContainerBuilder();
+            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            var configPath =
+                Path.Combine(
+                    assemblyLocation.Substring(0,
+                        assemblyLocation.LastIndexOf("\\", StringComparison.OrdinalIgnoreCase)),
+                    "ServiceMananger.config");
 
             // Register ViewModels
             builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
-                .Where(type => type.Name.EndsWith("ViewModel"))
+                .Where(type => type.Name.EndsWith("ViewModel") && !type.Name.EndsWith("ShellViewModel"))
                 .Where(type => (!string.IsNullOrEmpty(type.Namespace)) && type.Namespace.EndsWith("ViewModels"))
                 .Where(type => type.GetInterface(nameof(INotifyPropertyChanged), false) != null)
                 .AsSelf()
                 .InstancePerDependency();
+
+            builder.RegisterType<ShellViewModel>().As<INotifyIconShell>().AsSelf().InstancePerDependency();
 
             // Register Views
             builder.RegisterAssemblyTypes(AssemblySource.Instance.ToArray())
@@ -37,6 +49,10 @@ namespace ServiceManager
                 .Where(type => !string.IsNullOrEmpty(type.Namespace) && type.Namespace.EndsWith("Views"))
                 .AsSelf()
                 .InstancePerDependency();
+
+            builder.RegisterInstance(AppSettings.LoadSettings(configPath)).As<IAppSettings>().SingleInstance();
+            builder.Register(c => new NotifyIconService(c.Resolve<IEventAggregator>(), c.Resolve<IWindowManager>(),
+                c.Resolve<INotifyIconShell>())).As<INotifyIconService>().SingleInstance();
 
             builder.RegisterInstance<IWindowManager>(new WindowManager());
             builder.RegisterInstance<IEventAggregator>(new EventAggregator());

@@ -3,22 +3,131 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ServiceManager.Views"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-        mc:Ignorable="d"
-        Title="{Binding DisplayName}" Height="300" Width="300">
-    <Grid>
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:viewModels="clr-namespace:ServiceManager.ViewModels"
+        xmlns:util="clr-namespace:ServiceManager.Util"
+        mc:Ignorable="d" 
+                      BorderBrush="{DynamicResource AccentColorBrush}"
+                      ResizeMode="CanResizeWithGrip"
+                      BorderThickness="1"
+        Title="{Binding DisplayName}" Height="500" Width="600" d:DataContext="{d:DesignInstance viewModels:ShellViewModel }">
+    <controls:MetroWindow.Resources>
+        <util:FirstDegreeFunctionConverter x:Key="Subtract20" A="1" B="-50" />
+        <util:ServiceControllerStatusToBoolConverter x:Key="ControllerStatusToBoolConverter" />
+    </controls:MetroWindow.Resources>
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
+            <Button >
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource RefreshSymbol}"></VisualBrush>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock Text="Refresh" Style="{StaticResource TopBarButtonStyle}" />
+                    </StackPanel>
+                </Button.Content>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cal:ActionMessage MethodName="Refresh" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button>
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource ServicesSymbol}"></VisualBrush>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock Text="Service Manager" Style="{StaticResource TopBarButtonStyle}" />
+                    </StackPanel>
+                </Button.Content>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cal:ActionMessage MethodName="OpenWindowsServiceManager" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button >
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource TaskSymbol}"></VisualBrush>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock Text="Task Manager" Style="{StaticResource TopBarButtonStyle}" />
+                    </StackPanel>
+                </Button.Content>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cal:ActionMessage MethodName="OpenTaskManager" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button >
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource ExitSymbol}"></VisualBrush>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock Text="Exit" Style="{StaticResource TopBarButtonStyle}" />
+                    </StackPanel>
+                </Button.Content>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cal:ActionMessage MethodName="Exit" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
+    <Grid x:Name="BaseGrid" Margin="15,0,15,15">
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
-            <RowDefinition></RowDefinition>
+            <RowDefinition />
         </Grid.RowDefinitions>
         
-        <StackPanel Orientation="Horizontal">
-            <Button Content="Refresh" x:Name="RefreshServices" />
-            <Button Content="Open Service Mgr" x:Name="OpenWindowsServiceManager" />
-            <Button Content="Open Task Mgr" x:Name="OpenTaskManager"></Button>
-            <Button Content="Exit" x:Name="Exit"></Button>
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3">
+            <TextBlock Text="Search: " VerticalAlignment="Center" Height="18" />
+            <TextBox Text="{Binding SearchText, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}" Height="18" Width="150" Margin="0,0,15,0"></TextBox>
+            <CheckBox x:Name="ShowFavoritesOnly" Content="Show Favorites only"></CheckBox>
         </StackPanel>
+        <DataGrid Grid.Row="1" x:Name="Items" d:DataContext="{d:DesignInstance viewModels:ServiceViewModel }" AutoGenerateColumns="False" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding DisplayName}" Width="400"  Header="Name" IsReadOnly="True">
+                </DataGridTextColumn>
+                <DataGridCheckBoxColumn Binding="{Binding Favorite}" Header="Favorite"/>
+                <DataGridTemplateColumn Header="Status" SortMemberPath="Status">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <controls:ToggleSwitch OnLabel="Running"  OffLabel="Stopped" IsChecked="{Binding Status, Mode=OneWay, Converter={StaticResource ControllerStatusToBoolConverter}}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="IsCheckedChanged">
+                                            <cal:ActionMessage MethodName="StartStop" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </controls:ToggleSwitch>
+                                <TextBlock Text="{Binding Status}"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Width="{Binding ElementName=BaseGrid,Path=ActualWidth, Converter={StaticResource Subtract20}}" Margin="5,0,0,5"></TextBlock>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+        </DataGrid>
     </Grid>
 </controls:MetroWindow>
 
