@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\ShutdownRequest.cs" />
+    <Compile Include="ServiceWrapper.cs" />
     <Compile Include="Util\DelegateCommand.cs" />
     <Compile Include="ViewModels\UiMessageViewModel.cs" />
     <Page Include="App.xaml">

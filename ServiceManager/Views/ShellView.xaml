@@ -15,7 +15,6 @@
         Title="{Binding DisplayName}" Height="500" Width="600" d:DataContext="{d:DesignInstance viewModels:ShellViewModel }">
     <controls:MetroWindow.Resources>
         <util:FirstDegreeFunctionConverter x:Key="Subtract20" A="1" B="-50" />
-        <util:ServiceControllerStatusToBoolConverter x:Key="ControllerStatusToBoolConverter" />
     </controls:MetroWindow.Resources>
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
@@ -109,9 +108,9 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <controls:ToggleSwitch OnLabel="Running"  OffLabel="Stopped" IsChecked="{Binding Status, Mode=OneWay, Converter={StaticResource ControllerStatusToBoolConverter}}">
+                                <controls:ToggleSwitch OnLabel="Running"  OffLabel="Stopped" IsChecked="{Binding IsRunning, Mode=OneWay}">
                                     <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="IsCheckedChanged">
+                                        <i:EventTrigger EventName="Click">
                                             <cal:ActionMessage MethodName="StartStop" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
